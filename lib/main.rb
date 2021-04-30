@@ -4,23 +4,59 @@ require 'colorize'
 class Board
   attr_accessor :board
   def initialize
-    @board = Array.new(8).map {|row| row = Array.new(8, "■")}
+    @board = Array.new(8).map {|row| row = Array.new(8)}
   end
 
-  def set(pos, sign)
-    @board[pos[0]][pos[1]] = sign.to_s.green
-  end
-  
-  def draw_board(array)
-    array.each_with_index do |pos, index|
-      set(pos, index)
+  def clean_board
+    @board.each_with_index do |row, row_index|
+      row.each_with_index do |cell, index|
+        if row_index % 2 > 0
+          if index % 2 > 0
+            @board[row_index][index] = "■".black
+          else
+            @board[row_index][index] = "■".white
+          end
+        else
+          if index % 2 > 0
+            @board[row_index][index] = "■".white
+          else
+            @board[row_index][index] = "■".black
+          end
+        end
+      end
     end
-    @board.reverse.each do |row| 
+  end
+
+  def set(pos, sign, color)
+    @board[pos[0]][pos[1]] = sign.to_s.colorize(:color => color)
+  end
+
+  def draw_result(array)
+    clean_board()
+    array.each_with_index do |pos, index|
+      if index == 0
+        color = :red
+      elsif index == array.length - 1
+        color = :green
+      else
+        color = :light_blue
+      end
+      set(pos, index, color)
+    end
+
+    @board.reverse.each_with_index do |row, index| 
+      print "#{row.length - index} "
       row.each do |cell|
         print "#{cell} "
       end
       puts
     end
+
+    print "  "
+    8.times do |num|
+      print "#{num + 1} "
+    end
+    puts
   end
 end
 
@@ -78,6 +114,6 @@ end
 
 # method that takes 2 argument, start [x,y] end [x,y]
 # and gives back the shortest path from start to end
-
+steps = knight_moves([0, 0], [6, 5])
 board = Board.new
-board.draw_board(knight_moves([0, 0], [6, 5]))
+board.draw_result(steps)
