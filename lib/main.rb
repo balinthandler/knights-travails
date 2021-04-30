@@ -1,9 +1,26 @@
 # frozen_string_literal: true
+require 'colorize'
 
 class Board
   attr_accessor :board
   def initialize
-    @board = Array.new(8, Array.new(8))
+    @board = Array.new(8).map {|row| row = Array.new(8, "■")}
+  end
+
+  def set(pos, sign)
+    @board[pos[0]][pos[1]] = sign.to_s.green
+  end
+  
+  def draw_board(array)
+    array.each_with_index do |pos, index|
+      set(pos, index)
+    end
+    @board.reverse.each do |row| 
+      row.each do |cell|
+        print "#{cell} "
+      end
+      puts
+    end
   end
 end
 
@@ -56,9 +73,11 @@ def knight_moves(start, target)
       print "#{move}"
     end}
   puts
+  result.reverse
 end
 
 # method that takes 2 argument, start [x,y] end [x,y]
 # and gives back the shortest path from start to end
 
-knight_moves([0, 0], [5, 5])
+board = Board.new
+board.draw_board(knight_moves([0, 0], [6, 5]))
