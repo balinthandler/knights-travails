@@ -28,7 +28,7 @@ class Board
   end
 
   def set(pos, sign, color)
-    @board[pos[0]][pos[1]] = sign.to_s.colorize(:color => color)
+    @board[pos[1]][pos[0]] = sign.to_s.colorize(:color => color)
   end
 
   def draw_result(array)
@@ -114,6 +114,6 @@ end
 
 # method that takes 2 argument, start [x,y] end [x,y]
 # and gives back the shortest path from start to end
-steps = knight_moves([0, 0], [6, 5])
+steps = knight_moves([0, 1], [7, 1])
 board = Board.new
 board.draw_result(steps)
